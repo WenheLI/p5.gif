@@ -28,12 +28,13 @@
 - [__Jinzhong Yu__](https://github.com/NHibiki)
 
 ## Define the problem. 
-*What is the current state of things? What issue do you wish to solve and why? Who is the audience?*
 - GIF is a commonly used format to circulate in the web. While **p5.js** right now doesn't support any direct API related with GIF. We are thinking such a GIF library will be a huge help in terms of interenet experience. 
 - Compared with video, the GIF format can be a better way to present the project. We want to give an API that allow artists to capture their project and export it as gif during runtime.
 
+## Address Greater Landscape
+A better gif experience for digital artists.
+
 ## Deliverables
-*Propose a clear list of deliverables.*
 - A constructor to typically load GIF, wrapping by a GIF Class.
 - A set of methods to process GIF:
   - Splitting Frames.
@@ -103,36 +104,26 @@ cap.save();                             // -> p5GIF
 
 ## Timeline
 
-### Week 1
- - Environment for p5
- - Setup Coding Frameworks and Interfaces
- - CI setup 
-
-### Week 2
- - Implement gif loader & display
- - Implement gif general effects & split function 
-
-### Week 3
-  - Implement Capture function 
-  - Connect with p5 library
-
-### Week 4
- - Testing / 
- - Documentations / Notations  
-
-### Week 5
- - snacks🍟 and fun🤡 
- - Presentation  
+| Week | Wenhe | Jinzhong |
+| ---- | ------ | ----- |
+|1|1️⃣ Set up Circle CI <br/> 2⃣️ Set up Eslinter <br/> 3⃣️ Design p5Gif object’s interface|1️⃣ Config grunt build file <br/> 2️⃣ Complete static class interface <br/> 3️⃣ Setup symlinks with p5|
+|2|1️⃣ Implement gif general effects <br/> 2️⃣ Implement gif split function |1️⃣ Implement git loader <br/> 2️⃣ Implement gif display
+|3|1️⃣ Connect with p5 library|1️⃣ Implement Capture function
+|4|1️⃣ Test for functions related with p5Gif object interface and implementation <br/> 2⃣️ Document & Notations for p5Gif object implementation |1️⃣ Unit Test of library static functions <br/> 2️⃣ Document and Notate funcions of static methods
+|5|1️⃣ Library homepage design & implement|1️⃣ Example codes for p5gif library
 
 ## Documentation
  - Telegram for nightly updating
  - Blog for digestion
 
+## Accessibility
+ - API of whether to insert aria label when playing/stoping/pausing the gif.
+ - API of reading description & subtitle by voiceover throughout playing.
+
 ## Mentoring
-*List some possible mentors for this project. Describe what kinds of help you need (technical, conceptual, outreach, etc.)*
+*TBD*
 
 ## More about you
-*What are your interests and experience? Have you contributed to other open source projects? What barriers or concerns have kept you from contributing to free and open source software? If you have an online portfolio, github account, or other relevant documentation of your work, please include links. If the project is a collaboration, a section should be included for each collaborator.*
 
 #### Jinzhong Yu (NHibiki)
 | KEY | VALUE |
