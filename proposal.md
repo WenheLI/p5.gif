@@ -3,15 +3,12 @@
     - [Project Title](#project-title)
     - [Team Members](#team-members)
     - [Define the problem.](#define-the-problem)
+    - [Address Greater Landscape](#address-greater-landscape)
     - [Deliverables](#deliverables)
     - [Implementation](#implementation)
     - [Timeline](#timeline)
-        - [Week 1](#week-1)
-        - [Week 2](#week-2)
-        - [Week 3](#week-3)
-        - [Week 4](#week-4)
-        - [Week 5](#week-5)
     - [Documentation](#documentation)
+    - [Accessibility](#accessibility)
     - [Mentoring](#mentoring)
     - [More about you](#more-about-you)
             - [Jinzhong Yu (NHibiki)](#jinzhong-yu-nhibiki)
@@ -109,7 +106,7 @@ cap.save();                             // -> p5GIF
 |1|1️⃣ Set up Circle CI <br/> 2⃣️ Set up Eslinter <br/> 3⃣️ Design p5Gif object’s interface|1️⃣ Config grunt build file <br/> 2️⃣ Complete static class interface <br/> 3️⃣ Setup symlinks with p5|
 |2|1️⃣ Implement gif general effects <br/> 2️⃣ Implement gif split function |1️⃣ Implement git loader <br/> 2️⃣ Implement gif display
 |3|1️⃣ Connect with p5 library|1️⃣ Implement Capture function
-|4|1️⃣ Test for functions related with p5Gif object interface and implementation <br/> 2⃣️ Document & Notations for p5Gif object implementation |1️⃣ Unit Test of library static functions <br/> 2️⃣ Document and Notate funcions of static methods
+|4|1️⃣ Test for functions related with p5Gif object interface and implementation <br/> 2⃣️ Document & Notations for p5Gif object implementation |1️⃣ Unit Test of library static functions <br/> 2️⃣ Document and Notate funcions of static methods
 |5|1️⃣ Library homepage design & implement|1️⃣ Example codes for p5gif library
 
 ## Documentation
@@ -136,7 +133,14 @@ cap.save();                             // -> p5GIF
 | Portfolio | [Portfolio](https://portfolio.yuuno.cc) |
 
 #### Wenhe Li
-
+| KEY | VALUE |
+|---|---|
+| Interests && Experience | ["Full-stack", "Hacker", "IoT", "Processing & P5.js", "Kinect & Leap motion", "Human Computer Interface"] |
+| Contributed? | [ Not yet ] |
+| Barriers \|\| Concerns | "What I should do in the Open Source World" |
+| Github | [WenheLi](https://github.com/WenheLi) |
+| Blog | [Blog](https://blog.steins.live) |
+| Portfolio | Under Develop! |
 ## References
 
 - [p5.js](https://p5js.org)
