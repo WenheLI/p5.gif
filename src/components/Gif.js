@@ -1,6 +1,6 @@
 // const Giguct = require("../lib/gifuct-js.js");
 
-class Gif {
+export default class Gif {
     /** 
     This is the interface for GIf objec related methods
     */

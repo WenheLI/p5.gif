@@ -1,5 +1,5 @@
 /* Main Entry of Library */
 
-var p5Gif = require('./components/p5Gif.js');
+import p5Gif from './components/p5Gif.js';
 
 module.exports = p5Gif;

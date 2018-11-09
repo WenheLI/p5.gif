@@ -6,7 +6,9 @@
     },
     "devDependencies": {
         "@babel/core": "^7.1.5",
+        "@babel/plugin-proposal-class-properties": "^7.1.0",
         "@babel/preset-env": "^7.1.5",
+        "babelify": "^10.0.0",
         "brfs": "^2.0.1",
         "browserify": "^16.2.3",
         "derequire": "^2.0.6",

@@ -2,7 +2,7 @@
  * This file defines interface of Capture class
  */
 
-class Capture {
+export default class Capture {
 
     /**
      * default configuration
