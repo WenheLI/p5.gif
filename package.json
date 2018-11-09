@@ -22,5 +22,8 @@
         "grunt-babel": "^8.0.0",
         "grunt-contrib-copy": "^1.0.0",
         "grunt-contrib-uglify": "^4.0.0"
+    },
+    "dependencies": {
+        "babel-polyfill": "^6.26.0"
     }
 }
