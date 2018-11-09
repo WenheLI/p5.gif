@@ -5,6 +5,11 @@
         "build": "npx grunt"
     },
     "devDependencies": {
+        "@babel/core": "^7.1.5",
+        "@babel/preset-env": "^7.1.5",
+        "brfs": "^2.0.1",
+        "browserify": "^16.2.3",
+        "derequire": "^2.0.6",
         "eslint": "^5.8.0",
         "eslint-config-standard": "^12.0.0",
         "eslint-plugin-import": "^2.14.0",
@@ -12,6 +17,8 @@
         "eslint-plugin-promise": "^4.0.1",
         "eslint-plugin-standard": "^4.0.0",
         "grunt": "^1.0.3",
+        "grunt-babel": "^8.0.0",
+        "grunt-contrib-copy": "^1.0.0",
         "grunt-contrib-uglify": "^4.0.0"
     }
 }
