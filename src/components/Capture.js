@@ -47,4 +47,8 @@ export default class Capture {
      */
     save() {}
 
+    __decode() {
+        
+    }
+
 }

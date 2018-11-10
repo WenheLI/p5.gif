@@ -1,4 +1,4 @@
-// const Giguct = require("../lib/gifuct-js.js");
+import Gifuct from "../../lib/gif/gif";
 
 export default class Gif {
     /** 
@@ -77,7 +77,8 @@ export default class Gif {
             this._isloading = true;
             let buffer = await this.__fetch(url);
             this._src = url;
-            this._frames = this.__decodeGif(buffer);
+            let preframes = this.__decodeGif(buffer);
+            this._frames = this.__pixel2Iamge(preframes);
             this._isloading = false;
         } catch(err) {
             this._isloading = false;
@@ -85,8 +86,11 @@ export default class Gif {
         }
     }
 
-    async __decodeGif(buffer) {
-
+    __decodeGif(buffer) {
+        // do something with the frame data
+        let gif = new Gifuct(buffer);
+        let preframes = gif.decompressFrames(true);
+        return preframes;
     }
 
     /**
@@ -105,6 +109,19 @@ export default class Gif {
                 ajax.open('GET', url, true);
                 ajax.send();
                 ajax.onerror = function (e) { reject(e); };
+        });
+    }
+
+    /**
+     * 
+     */    
+    __pixel2Iamge(preframes) {
+        preframes.forEach(frame => {
+            let {width, height} = frame.dims
+            //TODO
+            // let tempIamge = createImage(width, height)
+            // tempIamge.loadPixels()
+            // for 
         });
     }
     
