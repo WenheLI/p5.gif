@@ -1,6 +1,6 @@
 .idea
 .vscode
 
-node_modules/
-build/
-lib/dist/
+/node_modules/
+/build/
+/lib/dist/
