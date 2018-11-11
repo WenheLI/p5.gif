@@ -9,8 +9,17 @@ export default class p5Gif {
     /**
      * module defined classes
      */
-    static Gif = Gif;
-    static Capture = Capture;
+    static get Gif() { p5Gif.checkP5(); return Gif; }
+    static get Capture() { p5Gif.checkP5(); return Capture; }
+
+    /**
+     * Check if p5 exists
+     */
+    static checkP5() {
+        if ((typeof window !== "undefined") && window.p5 && window.p5.Image && typeof window.p5.Image === "function")
+            return true;
+        throw new Error("p5 is not imported.");
+    }
 
     /**
      * Static method of loading gif into Gif instance
@@ -18,7 +27,8 @@ export default class p5Gif {
      * @returns {p5Gif.Gif}      Gif instance
      */
     static loadGif(...args) {
-        return null;
+        p5Gif.checkP5();
+        return new Gif(args);
     }
     
     /**
@@ -27,6 +37,7 @@ export default class p5Gif {
      * @returns {p5Gif.Capture}        Capture instance
      */
     static capture(config={}) {
+        p5Gif.checkP5();
         return null;
     }
 

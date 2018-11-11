@@ -29,7 +29,7 @@ module.exports = function(grunt) {
 
       // Invoke Browserify programatically to bundle the code
       var browseified = browserify(srcFilePath, {
-        standalone: 'p5'
+        standalone: 'p5Gif'
       }).transform(babelify, {presets: ["@babel/preset-env"], plugins: ["@babel/plugin-proposal-class-properties"]});
 
       if (isMin) {

@@ -59,7 +59,7 @@ module.exports = function(grunt) {
 
       // Invoke Browserify programatically to bundle the code
       var bundle = browserify(srcFilePath, {
-        standalone: 'p5'
+        standalone: 'p5Gif'
       })
         .transform('brfs')
         .bundle();

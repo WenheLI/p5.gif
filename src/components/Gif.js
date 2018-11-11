@@ -1,4 +1,6 @@
 import Gifuct from "../../lib/gif/gif";
+import P5GIFError from "./Error.js";
+import Timer from "./Timer.js";
 
 export default class Gif {
     /** 
@@ -9,12 +11,45 @@ export default class Gif {
      * Decode Credit to https://stackoverflow.com/questions/48234696/how-to-put-a-gif-with-canvas
      */
     
-    _src = ""; // String: Source URI
-    _isloading = false; // Boolean: is loading gif or pictures
-    
-    _frames = []; //p5Image{}[]
+    // String: Source URI
+    _src = ""; 
+    get src() { return this._src; }
 
-    _gitConfig = {
+    // Boolean: is loading gif or pictures
+    _isloading = false;
+    get isLoading() { return this._isloading; }
+    
+    // p5Image{}[]
+    _frames = null;
+    get frames() { this.__checkLoading(); return this._frames; }
+
+    // Boolean: if the gif is repeating
+    set repeat(t) { this._gifConfig.repeat = !!t; }
+    get repeat() { return this._gifConfig.repeat; }
+
+    // Number[]: the delay of each frame
+    set delay(t) {
+        if (!this.__isList(t)) throw new P5GIFError("Cannot pass in a non-array.");
+        for (let i = 0; i < this._frames.length; i++) {
+            let _t = parseInt(t[i]);
+            if (!_t || _t < 10) continue;
+            else this._gifConfig.delay[i] = _t;
+        }
+        return this._gifConfig.delay;
+    }
+    setDelayOf(index, value) {
+        index = parseInt(index);
+        if (Number.isNaN(index) || index < 0 || index >= this._frames.length) throw new P5GIFError("The index is invalid");
+        let _value = parseInt(value);
+        if (!_value || _value < 10) _value = this._gifConfig.delay[index];
+        this._gifConfig.delay[index] = _value;
+        return _value;
+    } 
+    get delay() { this.__checkLoading(); return this._gifConfig.delay; }
+
+
+    _gifConfig = {
+        repeat: true,
         delay: [] //describe delay for every frame
     }
 
@@ -25,20 +60,15 @@ export default class Gif {
     */
     constructor(sourceGif, gifConfig={}) {
        
-        if (typeof sourceGif === "string" && sourceGif.length != 0) {
-            this._src = sourceGif;
-            this.__loadGif(this._src);
+        if (typeof sourceGif === "string" && sourceGif.length) {
+            this.__loadGif(sourceGif);
         }
         //TODO check if sourceGif contains p5Image
-        else if (this.__isList(sourceGif) && sourceGif[0]) {
-            this._src = "";// local file location?
-            this._frames = sourceGif;
+        else if (this.__isList(sourceGif) && this.__checkFrames(sourceGif)) {
+            this._frames = this.__loadGifFromList(sourceGif);
         }
-        else throw new Error("Wrong type of sourceGif")
-        this._gitConfig = {
-            ... gifConfig,
-            ... this._gitConfig
-        }
+        else throw new P5GIFError("Wrong type of sourceGif.");
+        this._gifConfig = Object.assign(this._gifConfig, gifConfig);
     }
     
     /**
@@ -53,11 +83,6 @@ export default class Gif {
      * @param {name} the name you want to save as
      */
     download(name=""){}
-
-    /**
-     * @returns {frames} A set of frames in gif
-     */
-    frames(){}
 
     /**
      * 
@@ -124,7 +149,7 @@ export default class Gif {
                 ajax.responseType = "arraybuffer";
                 ajax.onload = function (e) {
                     if( e.target.status >= 200 && e.target.status < 300 ) { resolve(ajax.response); }
-                    else { reject(new Error("Unexcepted Response Code: " + e.target.status)) }
+                    else { reject(new P5GIFError("Fetch from internet failure.", e.target.status)) }
                 };
                 ajax.open('GET', url, true);
                 ajax.send();
@@ -138,10 +163,15 @@ export default class Gif {
      * @returns {Array} frames call frames that are produced to p5Image
      */    
     __pixel2Iamge(preframes) {
-        let frames = []
+        let frames = [];
+        let _width = 0, _height = 0;
         preframes.forEach(frame => {
-            this._gitConfig.delay.push(frame.delay);
+            this._gifConfig.delay.push(frame.delay);
+
             let {width, height} = frame.dims;
+            _width = Math.max(_width, width);
+            _height = Math.max(_height, height);
+
             let pixels = frame.pixels;
             //create image from pixel array
             let tempIamge = createImage(width, height);
@@ -158,30 +188,88 @@ export default class Gif {
             frames.push(tempIamge);
         });
 
+        this._gifConfig = Object.assign(this._gifConfig, {width: _width, height: _height});
         return frames;
     }
 
+    /**
+     * Check if the object is an array (or can be iterated)
+     * @param {Object} obj 
+     */
     __isList(obj) {
-        return Object.prototype.toString.call(obj) === "[object Array]"
+        return Array.isArray(obj); // Using Built-in Array Class to Check
+    }
+    
+    /**
+     * Only keep iterative items from an array object
+     * @param {Array} arr 
+     */
+    __loadGifFromList(arr) {
+        this._src = null;
+        this._isloading = false;
+        return Array.from(arr);
+    }
+
+    __checkFrames(arr) {
+        if (!arr || !arr.forEach) {
+            P5GIFError.throw("Cannot construct P5GIF from non-array object.");
+            return false;
+        }
+        arr.forEach(item => {
+            if (!(item instanceof p5.Image)) P5GIFError.throw("Elements of constructor array should be p5.Image objects.");
+            return false;
+        });
+        return true;
+    }
+
+    __checkLoading() {
+        if (this._isloading || !this._frames || !this._frames.length) throw new P5GIFError("Gif has not been prepared yet.", 1);
+        return true;
     }
 
     /**
-     * Display the gif
-     * @param {int} x display position x
-     * @param {int} y display position y
-     * 
+     * Controller of the gif
      */
-    __play(x, y, width, height) {
-        let helper = (index) => {
-            let timer = setTimeout(() => {
-                image(this._frames[index], x, y);
-                clearTimeout(timer);
-                index ++;
-                if (index < this._frames.length) helper(index+1);
-                else helper(0);
-            }, this._gitConfig.delay[index])
+    __currentController = null;
+    get __controller() {
+
+        // check if the gif is loaded, or if the controller exists
+        this.__checkLoading();
+        if (this.__currentController) return this.__currentController;
+
+        // initialize controller
+        let index = 0;
+        let defaultConf = {
+            x:0, y:0, width: this._gifConfig.width || 0, height: this._gifConfig.height || 0
+        };
+
+        // play routine loop
+        let playRoutine = Timer.Routine(() => {
+            let {x, y} = defaultConf;
+            image(this._frames[index++], x, y);
+            if (index >= this._frames.length) {
+                index = 0;
+                if (!this._gifConfig.repeat) playRoutine.stop();
+            }
+            return this._gifConfig.delay && this._gifConfig.delay[index] || 100;
+        });
+
+        // controllers
+        const play = (defaultConf=null) => {
+            if (defaultConf) this.defaultConf = Object.assign(this.defaultConf, defaultConf);
+            playRoutine.start();
         }
-        helper(0);
+        const pause = () => { playRoutine.pause(); }
+
+        return this.__currentController = { 
+            get play() {return play}, 
+            get pause() {return pause},
+            get state() {return playRoutine.state}
+        };
+
     }
+
+    get play() { return this.__controller && this.__controller.play; }
+    get pause() { return this.__controller && this.__controller.pause; }
     
 }
