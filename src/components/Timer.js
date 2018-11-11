@@ -14,7 +14,7 @@ export default class Timer {
 
     /**
      * await Timer.Await(some_time) to sleep current routine for some time.
-     * @param {Number} time miniseconds to sleep
+     * @param {Number} time milliseconds to sleep
      */
     static Await(time=0) {
         if (!(time = parseInt(time))) return null;
@@ -28,7 +28,7 @@ export default class Timer {
      * @param {Object} param1 
      * @returns {Routine} { start(), pause(), stop(), terminate(), state, tick }
      */
-    static Routine(fn, {defaultTick=100} = {}) {
+    static Routine(fn, {defaultTick=100, block=false} = {}) {
 
         // check callback IS a callable
         if (!fn || !fn.call) return null;
@@ -37,30 +37,40 @@ export default class Timer {
         let tick = 0;
         let state = Timer.ROUTINE_STATE.STOP;
         let _currentRoutine = {};
+
+        let nextTick = async (force=false) => {
+
+            // get sleep interval time from callback function
+            let nextTickIntv = defaultTick;
+            let durings = 0;
+            try {
+                let startAt = Date.now();
+                nextTickIntv = state !== Timer.ROUTINE_STATE.START && !force ?
+                            defaultTick :
+                            await fn.call(_currentRoutine, tick) || defaultTick;
+                durings = Date.now() - startAt;
+            } catch(e) { console.error(e); }
+
+            // add tick counter
+            tick += 1;
+
+            // interval time cannot be less than 10ms
+            if (block) await Timer.Await(Math.max(10, nextTickIntv));
+            else if (durings > 0) await Timer.Await(durings);
+
+        }
         
         // eternal routine, unless terminated
         const routine = async () => {
             while(state !== Timer.ROUTINE_STATE.TERMINATED) {
-
-                // get sleep interval time from callback function
-                let nextTick = defaultTick;
-                try {
-                    nextTick = state !== Timer.ROUTINE_STATE.START ?
-                                defaultTick :
-                                await fn.call(_currentRoutine, tick) || defaultTick;
-                } catch(e) { console.error(e); }
-
-                // add tick counter
-                tick += 1;
-
-                // interval time cannot be less than 10ms
-                await Timer.Await(Math.max(10, nextTick));
+                await nextTick();
             }
         }
         routine();
 
         // controller functions
         const start = () => { state = Timer.ROUTINE_STATE.START; };
+        const next = () => { if (state !== Timer.ROUTINE_STATE.START) nextTick(true); };
         const stop = () => { state = Timer.ROUTINE_STATE.STOP; tick = 0; };
         const pause = () => { state = Timer.ROUTINE_STATE.PAUSE; };
         const terminate = () => { state = Timer.ROUTINE_STATE.TERMINATED; };
@@ -75,6 +85,7 @@ export default class Timer {
         // return routine instance
         return _currentRoutine = {
             get start() {return check(start)},
+            get next() {return check(next)},
             get pause() {return check(pause)},
             get stop() {return check(stop)},
             get terminate() {return check(terminate)},

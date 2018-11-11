@@ -259,10 +259,12 @@ export default class Gif {
             if (defaultConf) this.defaultConf = Object.assign(this.defaultConf, defaultConf);
             playRoutine.start();
         }
+        const next = () => { playRoutine.next(); }
         const pause = () => { playRoutine.pause(); }
 
         return this.__currentController = { 
             get play() {return play}, 
+            get next() {return next},
             get pause() {return pause},
             get state() {return playRoutine.state}
         };
@@ -270,6 +272,7 @@ export default class Gif {
     }
 
     get play() { return this.__controller && this.__controller.play; }
+    get next() { return this.__controller && this.__controller.next; }
     get pause() { return this.__controller && this.__controller.pause; }
     
 }
