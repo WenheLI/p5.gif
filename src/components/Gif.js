@@ -14,17 +14,37 @@ export default class Gif {
     
     _frames = []; //p5Image{}[]
 
+    _gitConfig = {
+        delay: [] //describe delay for every frame
+    }
+
     /** 
-    * @param {sourceGif} it could be gifUrl or a list of p5Image
-    * @param {gifConfig} A dict contains gif related configration, ie. size, quality
+    * @param {URI} sourceGif it could be gifUrl or a list of p5Image
+    * @param {Object} gifConfig dict contains gif related configuration, ie. size, quality
     * @returns {Gif} 
     */
-    constructor(sourceGif, gifConfig={}) {}
+    constructor(sourceGif, gifConfig={}) {
+       
+        if (typeof sourceGif === "string" && sourceGif.length != 0) {
+            this._src = sourceGif;
+            this.__loadGif(this._src);
+        }
+        //TODO check if sourceGif contains p5Image
+        else if (this.__isList(sourceGif) && sourceGif[0]) {
+            this._src = "";// local file location?
+            this._frames = sourceGif;
+        }
+        else throw new Error("Wrong type of sourceGif")
+        this._gitConfig = {
+            ... gifConfig,
+            ... this._gitConfig
+        }
+    }
     
     /**
      * 
-     * @param {width} resized width 
-     * @param {height} resized height 
+     * @param {int} width resized width 
+     * @param {int} height height 
      */
     resize(width, height){}
 
@@ -113,16 +133,55 @@ export default class Gif {
     }
 
     /**
-     * 
+     * convey pixels in gif to p5Image
+     * @param {Array} preframes all frames in array
+     * @returns {Array} frames call frames that are produced to p5Image
      */    
     __pixel2Iamge(preframes) {
+        let frames = []
         preframes.forEach(frame => {
-            let {width, height} = frame.dims
-            //TODO
-            // let tempIamge = createImage(width, height)
-            // tempIamge.loadPixels()
-            // for 
+            this._gitConfig.delay.push(frame.delay);
+            let {width, height} = frame.dims;
+            let pixels = frame.pixels;
+            //create image from pixel array
+            let tempIamge = createImage(width, height);
+            tempIamge.loadPixels();
+            for (let x = 0; x < width; x++) {
+                for (let y = 0; y < height; y++) {
+                    let cursor = y * width + x;
+                    tempIamge.set(x, y, color(pixels[cursor]));
+                    //let cursor = y * width + 4*x;
+                    //tempIamge.set(x, y, color(pixels[cursor], pixels[cursor+1], pixels[cursor+2], pixels[cursor+3]));
+                }
+            }
+            tempIamge.updatePixels();
+            frames.push(tempIamge);
         });
+
+        return frames;
+    }
+
+    __isList(obj) {
+        return Object.prototype.toString.call(obj) === "[object Array]"
+    }
+
+    /**
+     * Display the gif
+     * @param {int} x display position x
+     * @param {int} y display position y
+     * 
+     */
+    __play(x, y, width, height) {
+        let helper = (index) => {
+            let timer = setTimeout(() => {
+                image(this._frames[index], x, y);
+                clearTimeout(timer);
+                index ++;
+                if (index < this._frames.length) helper(index+1);
+                else helper(0);
+            }, this._gitConfig.delay[index])
+        }
+        helper(0);
     }
     
 }
