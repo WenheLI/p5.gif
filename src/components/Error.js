@@ -1,6 +1,6 @@
 export default class P5GIFError extends Error {
 
-    constructor(msg="Unexpected Error!", code=0) {
+    constructor(msg='Unexpected Error!', code=0) {
         super(msg);
         this.msg  = msg;
         this.code = code;
@@ -22,7 +22,7 @@ export default class P5GIFError extends Error {
      * @param {Number} code Error code
      * @param {Boolean} _throw print to console only or throw
      */
-    static throw(msg="", code=0, _throw=false) {
+    static throw(msg='', code=0, _throw=false) {
         if (_throw) throw new P5GIFError(msg, code);
         else return new P5GIFError(msg, code).log();
     }

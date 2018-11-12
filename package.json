@@ -1,19 +1,22 @@
 {
     "name": "p5.gif",
-    "version": "0.0.1",
+    "version": "0.1.1",
     "scripts": {
-        "build": "npx grunt"
+        "build": "npx grunt",
+        "lint": "npx eslint ./src/*.js ./src/components/*.js"
     },
     "devDependencies": {
         "@babel/core": "^7.1.5",
         "@babel/plugin-proposal-class-properties": "^7.1.0",
         "@babel/preset-env": "^7.1.5",
+        "babel-eslint": "^10.0.1",
         "babelify": "^10.0.0",
         "brfs": "^2.0.1",
         "browserify": "^16.2.3",
         "derequire": "^2.0.6",
         "eslint": "^5.9.0",
         "eslint-config-standard": "^12.0.0",
+        "eslint-plugin-babel": "^5.2.1",
         "eslint-plugin-import": "^2.14.0",
         "eslint-plugin-node": "^8.0.0",
         "eslint-plugin-promise": "^4.0.1",
@@ -21,10 +24,10 @@
         "grunt": "^1.0.3",
         "grunt-babel": "^8.0.0",
         "grunt-contrib-copy": "^1.0.0",
-        "grunt-contrib-uglify": "^4.0.0"
+        "grunt-contrib-uglify": "^4.0.0",
+        "grunt-eslint": "^21.0.0"
     },
     "dependencies": {
-        "babel-polyfill": "^6.26.0",
-        "grunt-eslint": "^21.0.0"
+        "babel-polyfill": "^6.26.0"
     }
 }

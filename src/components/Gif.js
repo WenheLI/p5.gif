@@ -1,6 +1,6 @@
-import Gifuct from "../../lib/gif/gif";
-import P5GIFError from "./Error.js";
-import Timer from "./Timer.js";
+import Gifuct from '../../lib/gif/gif';
+import P5GIFError from './Error.js';
+import Timer from './Timer.js';
 
 export default class Gif {
     /** 
@@ -12,7 +12,7 @@ export default class Gif {
      */
     
     // String: Source URI
-    _src = ""; 
+    _src = ''; 
     get src() { return this._src; }
 
     // Boolean: is loading gif or pictures
@@ -29,7 +29,7 @@ export default class Gif {
 
     // Number[]: the delay of each frame
     set delay(t) {
-        if (!this.__isList(t)) throw new P5GIFError("Cannot pass in a non-array.");
+        if (!this.__isList(t)) throw new P5GIFError('Cannot pass in a non-array.');
         for (let i = 0; i < this._frames.length; i++) {
             let _t = parseInt(t[i]);
             if (!_t || _t < 10) continue;
@@ -39,7 +39,7 @@ export default class Gif {
     }
     setDelayOf(index, value) {
         index = parseInt(index);
-        if (Number.isNaN(index) || index < 0 || index >= this._frames.length) throw new P5GIFError("The index is invalid");
+        if (Number.isNaN(index) || index < 0 || index >= this._frames.length) throw new P5GIFError('The index is invalid');
         let _value = parseInt(value);
         if (!_value || _value < 10) _value = this._gifConfig.delay[index];
         this._gifConfig.delay[index] = _value;
@@ -60,14 +60,14 @@ export default class Gif {
     */
     constructor(sourceGif, gifConfig={}) {
        
-        if (typeof sourceGif === "string" && sourceGif.length) {
+        if (typeof sourceGif === 'string' && sourceGif.length) {
             this.__loadGif(sourceGif);
         }
         //TODO check if sourceGif contains p5Image
         else if (this.__isList(sourceGif) && this.__checkFrames(sourceGif)) {
             this._frames = this.__loadGifFromList(sourceGif);
         }
-        else throw new P5GIFError("Wrong type of sourceGif.");
+        else throw new P5GIFError('Wrong type of sourceGif.');
         this._gifConfig = Object.assign(this._gifConfig, gifConfig);
     }
     
@@ -82,7 +82,7 @@ export default class Gif {
      * 
      * @param {name} the name you want to save as
      */
-    download(name=""){}
+    download(name=''){}
 
     /**
      * 
@@ -146,10 +146,10 @@ export default class Gif {
     __fetch(url) {
         return new Promise((resolve, reject) => {
             var ajax = new XMLHttpRequest();
-                ajax.responseType = "arraybuffer";
+                ajax.responseType = 'arraybuffer';
                 ajax.onload = function (e) {
                     if( e.target.status >= 200 && e.target.status < 300 ) { resolve(ajax.response); }
-                    else { reject(new P5GIFError("Fetch from internet failure.", e.target.status)) }
+                    else { reject(new P5GIFError('Fetch from internet failure.', e.target.status)) }
                 };
                 ajax.open('GET', url, true);
                 ajax.send();
@@ -212,18 +212,18 @@ export default class Gif {
 
     __checkFrames(arr) {
         if (!arr || !arr.forEach) {
-            P5GIFError.throw("Cannot construct P5GIF from non-array object.");
+            P5GIFError.throw('Cannot construct P5GIF from non-array object.');
             return false;
         }
         arr.forEach(item => {
-            if (!(item instanceof p5.Image)) P5GIFError.throw("Elements of constructor array should be p5.Image objects.");
+            if (!(item instanceof p5.Image)) P5GIFError.throw('Elements of constructor array should be p5.Image objects.');
             return false;
         });
         return true;
     }
 
     __checkLoading() {
-        if (this._isloading || !this._frames || !this._frames.length) throw new P5GIFError("Gif has not been prepared yet.", 1);
+        if (this._isloading || !this._frames || !this._frames.length) throw new P5GIFError('Gif has not been prepared yet.', 1);
         return true;
     }
 

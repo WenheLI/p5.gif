@@ -1,4 +1,4 @@
-import {TimerError} from "./Error.js";
+import {TimerError} from './Error.js';
 
 export default class Timer {
 
@@ -77,7 +77,7 @@ export default class Timer {
 
         // check if the routine is terminated before each call
         const check = (_fn) => () => {
-            if (state === Timer.ROUTINE_STATE.TERMINATED) throw new TimerError("Cannot operate on a terminated routine.", 0);
+            if (state === Timer.ROUTINE_STATE.TERMINATED) throw new TimerError('Cannot operate on a terminated routine.', 0);
             if (_fn && _fn.call) return _fn.call(_fn);
             else return _fn;
         }

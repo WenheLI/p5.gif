@@ -5,7 +5,7 @@ import Gif from './Gif.js';
 import Capture from './Capture.js';
 
 export default class p5Gif {
-
+    
     /**
      * module defined classes
      */
@@ -16,9 +16,8 @@ export default class p5Gif {
      * Check if p5 exists
      */
     static checkP5() {
-        if ((typeof window !== "undefined") && window.p5 && window.p5.Image && typeof window.p5.Image === "function")
-            return true;
-        throw new Error("p5 is not imported.");
+        if (typeof window !== 'undefined' && window.p5 && window.p5.Image && typeof window.p5.Image === 'function') return true;
+        throw new Error('p5 is not imported.');
     }
 
     /**
@@ -30,9 +29,9 @@ export default class p5Gif {
         p5Gif.checkP5();
         return new Gif(args);
     }
-    
+
     /**
-     * Static method of initializing Capture instance 
+     * Static method of initializing Capture instance
      * @param   {object}        config Config to initialize Capture instance
      * @returns {p5Gif.Capture}        Capture instance
      */

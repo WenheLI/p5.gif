@@ -33,15 +33,19 @@ module.exports = function (grunt) {
                     { expand: true, cwd: 'lib/dist', src: ['**'], dest: 'build/p5/' }
                 ]
             }
+        },
+        eslint: {
+            target: ['src/*.js', 'src/components/*.js']
         }
     });
 
-    grunt.loadTasks("tasks/build");
-    grunt.loadNpmTasks("grunt-babel");
-    grunt.loadNpmTasks("grunt-contrib-uglify");
-    grunt.loadNpmTasks("grunt-contrib-copy");
-
+    grunt.loadTasks('tasks/build');
+    grunt.loadNpmTasks('grunt-babel');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-eslint');
+    
     // grunt.registerTask('build', ['browserify', 'browserify:min', 'uglify']);
-    grunt.registerTask("default", ['browserify', 'browserify:min', 'babel', 'uglify', "copy"]);
+    grunt.registerTask('default', ['eslint', 'browserify', 'browserify:min', 'babel', 'uglify', 'copy']);
 
 }
