@@ -1,4 +1,12 @@
 # Final Project Proposal
+
+[![NHibiki](https://img.shields.io/badge/Download-Stable-39c000.svg?style=flat-square)](https://p5gif-build.s3.us-west-2.amazonaws.com/nightly/stable.min.js)
+[![NHibiki](https://img.shields.io/badge/Download-Nightly-edb900.svg?style=flat-square)](https://p5gif-build.s3.us-west-2.amazonaws.com/nightly/latest.min.js)
+[![CircleCI - Prod](https://circleci.com/gh/WenheLI/p5.gif/tree/master.svg?style=svg)](https://circleci.com/gh/WenheLI/p5.gif/tree/master)
+
+A Powerful gif module for p5.js
+
+## Outline
 - [Final Project Proposal](#final-project-proposal)
     - [Project Title](#project-title)
     - [Team Members](#team-members)
