@@ -1,4 +1,4 @@
-# Final Project Proposal
+# p5.gif
 
 [![NHibiki](https://img.shields.io/badge/Download-Stable-39c000.svg?style=flat-square)](https://p5gif-build.s3.us-west-2.amazonaws.com/nightly/stable.min.js)
 [![NHibiki](https://img.shields.io/badge/Download-Nightly-edb900.svg?style=flat-square)](https://p5gif-build.s3.us-west-2.amazonaws.com/nightly/latest.min.js)
