@@ -1,6 +1,6 @@
 import Gifuct from '../../lib/gif/gif';
 import P5GIFError from './Error.js';
-import Timer from './Timer.js';
+import { Routine } from '@nhibiki/js-routine';
 
 export default class Gif {
     /** 
@@ -244,7 +244,7 @@ export default class Gif {
         };
 
         // play routine loop
-        let playRoutine = Timer.Routine(() => {
+        let playRoutine = Routine.Routine(async () => {
             let {x, y} = defaultConf;
             image(this._frames[index++], x, y);
             if (index >= this._frames.length) {
