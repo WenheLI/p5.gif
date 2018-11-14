@@ -26,6 +26,7 @@ export default class p5Gif {
      * @returns {p5Gif.Gif}      Gif instance
      */
     static loadGif(...args) {
+        console.log(args)
         p5Gif.checkP5();
         return new Gif(args);
     }
