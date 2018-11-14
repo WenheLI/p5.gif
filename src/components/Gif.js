@@ -110,10 +110,10 @@ export default class Gif {
      */
     setFrame(index, frame){
         if (index < 0 || index >= this.frames.length) throw new P5GIFError("Wrong value of index");
-        else if (! frame instanceof p5.Image) throw new P5GIFError("Wrong frame type, it should be p5.Image");
+        else if (! (frame instanceof p5.Image)) throw new P5GIFError("Wrong frame type, it should be p5.Image");
         
         this._frames[index] = frame;
-        return this;
+        return this
     }
 
     /**
