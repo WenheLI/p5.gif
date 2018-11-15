@@ -31,7 +31,7 @@ export default class Gif {
     set delay(t) {
         if (typeof t === 'number') {
             if (t < 10) return this._gifConfig.delay;
-            else return this._gifConfig.delay = this._gifConfig.delay.map((it)=>it=t);
+            else return this._gifConfig.delay = Array(this._frames.length).fill(t);
         }
         else if(!this.__isList(t)) throw new P5GIFError('Cannot pass in a non-array.');
         for (let i = 0; i < this._frames.length; i++) {
@@ -63,27 +63,25 @@ export default class Gif {
     * @param {function} callback for finishing loading gif
     * @returns {Gif} 
     */
-    constructor(sourceGif, ...args) {
-        let callback = ()=>{};
-        let gifConfig = {};
+    constructor(sourceGif, gifConfig=null) {
 
-        args.forEach((arg) => {
-            //arg is a callback
-            if (arg.call) callback = arg;
-            //if it is config
-            else if (typeof arg === 'object') gifConfig = arg;
-        });
+        // check type of config
+        if (gifConfig && typeof gifConfig !== 'object') throw new P5GIFError("Config can only be an object.");
+        this._gifConfig = Object.assign(this._gifConfig, gifConfig);
+
+        // check type of callback
+        let callback = (gifConfig || {}).onPrepare || null;
+        if (callback && typeof callback !== 'function') throw new P5GIFError("onPrepare can only be a function.");
 
         if (typeof sourceGif === 'string' && sourceGif.length) {
-            this.__loadGif(sourceGif, callback);
+            this.__loadGif(sourceGif);
         }
         //check if sourceGif contains p5Image
         else if (this.__isList(sourceGif) && this.__checkFrames(sourceGif)) {
-            this._frames = this.__loadGifFromList(sourceGif);
-            callback.call();
+            this.__loadGifFromList(sourceGif);
         }
         else throw new P5GIFError('Wrong type of sourceGif.');
-        this._gifConfig = Object.assign(this._gifConfig, gifConfig);
+
     }
     
     /**
@@ -113,6 +111,7 @@ export default class Gif {
         else if (! (frame instanceof p5.Image)) throw new P5GIFError("Wrong frame type, it should be p5.Image");
         
         this._frames[index] = frame;
+        this.setDelayOf(index, 100);
         return this
     }
 
@@ -130,7 +129,7 @@ export default class Gif {
      * @param {start} start index for the range(Inclued)
      * @param {end} end index for range (Not inclued) 
      * @param {step} step 
-     * @return {[Gif]}
+     * @return {Gif}
      */
     range(start, end, step=1) {}
     
@@ -147,7 +146,7 @@ export default class Gif {
      * @param {URL} url describe the gif url
      * @param {function} callbck function for finishing loading gif
      */
-    async __loadGif(url, callback) {
+    async __loadGif(url) {
         try {
             this._isloading = true;
             let buffer = await this.__fetch(url);
@@ -155,7 +154,7 @@ export default class Gif {
             let preframes = this.__decodeGif(buffer);
             this._frames = this.__pixel2Iamge(preframes);
             this._isloading = false;
-            callback.call();
+            this._gifConfig.onPrepare && Routine.Task(this._gifConfig.onPrepare, this)();
         } catch(err) {
             this._isloading = false;
             throw err;
@@ -236,9 +235,11 @@ export default class Gif {
      * @param {Array} arr 
      */
     __loadGifFromList(arr) {
+        this._frames = Array.from(arr);
         this._src = null;
         this._isloading = false;
-        return Array.from(arr);
+        this.delay = 100;
+        this._gifConfig.onPrepare && Routine.Task(this._gifConfig.onPrepare, this)();
     }
 
     __checkFrames(arr) {
@@ -283,16 +284,16 @@ export default class Gif {
                 if (!this._gifConfig.repeat) playRoutine.stop();
             }
             return this._gifConfig.delay && this._gifConfig.delay[index] || 100;
-        });
+        }, { infinite: true });
 
         // controllers
-        const loop = (defaultConf=null) => {
-            if (defaultConf) this.defaultConf = Object.assign(this.defaultConf, defaultConf);
-            this.defaultConf.repeat = true;
+        const loop = (_defaultConf=null) => {
+            if (defaultConf) defaultConf = Object.assign(defaultConf, _defaultConf);
+            this._gifConfig.repeat = true;
             playRoutine.start();
         }
-        const play = (defaultConf=null) => {
-            if (defaultConf) this.defaultConf = Object.assign(this.defaultConf, defaultConf);
+        const play = (_defaultConf=null) => {
+            if (defaultConf) defaultConf = Object.assign(defaultConf, _defaultConf);
             playRoutine.start();
         }
         const next = () => { playRoutine.next(); }
@@ -303,12 +304,14 @@ export default class Gif {
             get play() {return play},
             get next() {return next},
             get pause() {return pause},
-            get state() {return playRoutine.state}
+            get state() {return playRoutine.state},
+            get index() {return index}
         };
 
     }
 
     get play() { return this.__controller && this.__controller.play; }
+    get loop() { return this.__controller && this.__controller.loop; }
     get next() { return this.__controller && this.__controller.next; }
     get pause() { return this.__controller && this.__controller.pause; }
     

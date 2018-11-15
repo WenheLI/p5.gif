@@ -1,14 +1,21 @@
-var jpg;
-var gif;
+var jpg1, jpg2;
+var gif1, gif2;
 var startFrame = 0;
 
 function setup() {
     // put setup code here
     createCanvas(500, 500);
-    jpg = loadImage("test.jpg");
-    gif = new p5Gif.Gif("test.gif", () => {
-        gif.play();
+
+    gif1 = p5Gif.loadGif("test.gif", function() {
+        this.play();
     }, {repeat:false});
+
+    jpg1 = loadImage("test.jpg");
+    jpg2 = loadImage("test.jpg");
+    jpg2.filter('gray');
+    gif2 = p5Gif.loadGif([jpg1, jpg2], function() {
+        this.play({y:200});
+    });
 }
 
 
