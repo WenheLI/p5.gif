@@ -159,7 +159,7 @@ export default class Gif {
         for (let i = start; i < end; i+=step) {
             framesList.push(this.frames[i]);
         }
-        return framesList;
+        return new Gif(framesList, this._gifConfig);
     }
     
     /**
@@ -231,16 +231,14 @@ export default class Gif {
             _width = Math.max(_width, width);
             _height = Math.max(_height, height);
 
-            let pixels = frame.pixels;
+            let pixels = frame.patch;
             //create image from pixel array
             let tempIamge = createImage(width, height);
             tempIamge.loadPixels();
             for (let x = 0; x < width; x++) {
                 for (let y = 0; y < height; y++) {
-                    let cursor = y * width + x;
-                    tempIamge.set(x, y, color(pixels[cursor]));
-                    //let cursor = y * width + 4*x;
-                    //tempIamge.set(x, y, color(pixels[cursor], pixels[cursor+1], pixels[cursor+2], pixels[cursor+3]));
+                    let cursor = y * width*4 + 4*x;
+                    tempIamge.set(x, y, color(pixels[cursor], pixels[cursor+1], pixels[cursor+2], pixels[cursor+3]));
                 }
             }
             tempIamge.updatePixels();
