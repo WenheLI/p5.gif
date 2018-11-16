@@ -25,10 +25,18 @@ export default class p5Gif {
      * @param   {Any}       args Any types passed to Gif constructor
      * @returns {p5Gif.Gif}      Gif instance
      */
-    static loadGif(...args) {
-        console.log(args)
+    static loadGif(source, ...args) {
         p5Gif.checkP5();
-        return new Gif(args);
+        
+        let config = null;
+        let callback = null;
+
+        args.forEach(arg => {
+            if (!config && typeof arg === 'object') config = arg;
+            else if (!callback && typeof arg === 'function') callback = arg;
+        });
+
+        return new Gif(source, { ...config, onPrepare: callback || null });
     }
 
     /**

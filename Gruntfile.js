@@ -29,7 +29,7 @@ module.exports = function (grunt) {
         copy: {
             copy_browser_test: {
                 files: [
-                    { expand: true, cwd: 'browser-test', src: ['**'], dest: 'build/test/' },
+                    { expand: true, cwd: 'browser_test', src: ['**'], dest: 'build/test/' },
                     { expand: true, cwd: 'lib/dist', src: ['**'], dest: 'build/p5/' }
                 ]
             }

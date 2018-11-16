@@ -28,7 +28,7 @@
         "grunt-eslint": "^21.0.0"
     },
     "dependencies": {
-        "@nhibiki/js-routine": "^1.0.1",
+        "@nhibiki/js-routine": "^1.1.0",
         "babel-polyfill": "^6.26.0"
     }
 }
