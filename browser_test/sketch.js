@@ -11,8 +11,10 @@ function setup() {
     }, {repeat:false});
 
     jpg1 = loadImage("test.jpg");
-    jpg2 = loadImage("test.jpg");
-    jpg2.filter('gray');
+    jpg2 = loadImage("test.jpg", () => {
+        jpg2.filter('gray');
+    });
+    
     gif2 = p5Gif.loadGif([jpg1, jpg2], function() {
         this.play({y:200});
     });
