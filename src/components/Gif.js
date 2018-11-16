@@ -2,6 +2,8 @@ import Gifuct from '../../lib/gif/gif';
 import P5GIFError from './Error.js';
 import { Routine } from '@nhibiki/js-routine';
 
+//TODO: gif encoder, gif colo model, import p5.Image operation wrapper 
+
 export default class Gif {
     /** 
     This is the interface for GIf objec related methods
@@ -100,7 +102,12 @@ export default class Gif {
      * 
      * @param {name} the name you want to save as
      */
-    download(name=''){}
+    download(name=''){
+        // let link = document.createElement('a');
+        // link.download = 'test.gif';
+        // link.style.display = 'none';
+        // link.href =
+    }
 
     /**
      * 
@@ -123,16 +130,39 @@ export default class Gif {
      * @param {Iterator} Optional, can replace your customized iterator for inseration. 
      * @returns {Gif}
      */
-    insertFrames(index, frames, iterator=null) {}
+    insertFrames(index, frames, iterator=null) {
+        if (iterator != null) {
+            if (typeof iterator != 'function') throw new P5GIFError('Iterator should be a function'); 
+            else iterator.call(this._frames);  
+        } else {
+            let frames = frames.reverse();
+            for (let i = 0; i < this.frames.length; i++) {
+                if(i >= index && frames.length != 0) {
+                    this._frames[i] = frames.pop();
+                }
+            }
+        }
+        return this;
+    }
 
     /**
      * 
      * @param {start} start index for the range(Inclued)
      * @param {end} end index for range (Not inclued) 
      * @param {step} step 
-     * @return {[Gif]}
+     * @return {[p5.Image]}
      */
-    range(start, end, step=1) {}
+    range(start, end, step=1) {
+        let rangeList = [];
+        if (start < 0 || start >= this._frames.length || end <= 0 || end > this._frames.length) throw new P5GIFError("Wrong end, start value");
+        if (end < start && step > 0) throw new P5GIFError('end should bigger than start, if step is positive');
+
+        for (let i = start; i < end; i+=step) {
+            rangeList.push(this.frames[i]);
+        }
+
+        return rangeList;
+    }
     
     /**
      *  Display the gif
