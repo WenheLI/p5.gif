@@ -1,6 +1,7 @@
 import Gifuct from '../../lib/gif/gif';
 import P5GIFError from './Error.js';
 import { Routine } from '@nhibiki/js-routine';
+import GIFEncoder from 'gif-encoder';
 
 //TODO: gif encoder, gif colo model, import p5.Image operation wrapper 
 
@@ -28,6 +29,25 @@ export default class Gif {
     // Boolean: if the gif is repeating
     set repeat(t) { this._gifConfig.repeat = !!t; }
     get repeat() { return this._gifConfig.repeat; }
+
+    get height() {return this._gifConfig.height || 0; }
+    set height(h) {
+        if (typeof h === 'number' && h >= 0) {
+            this._gifConfig.height = h;
+        } else {
+            throw new P5GIFError("Wrong value for height");
+        }
+    }
+
+    get width() {return this._gifConfig.width || 0; }
+    set width(w) {
+        if (typeof w === 'number' && w >= 0) {
+            this._gifConfig.width = w;
+        } else {
+            throw new P5GIFError("Wrong value for width");
+        }
+    }
+  
 
     // Number[]: the delay of each frame
     set delay(t) {
@@ -98,9 +118,16 @@ export default class Gif {
 
     /**
      * 
-     * @param {name} the name you want to save as
+     * @param {string}  name the name you want to save as
      */
-    download(name=''){
+    download(name='default.gif'){
+        let gif = new GIFEncoder(this.width, this.height);
+        gif.writeHeader();
+        this.frames.forEach(frame => {
+            gif.addFrame(frame.pixels);
+        })
+        gif.finish();
+        return gif;
         // let link = document.createElement('a');
         // link.download = 'test.gif';
         // link.style.display = 'none';
@@ -109,8 +136,8 @@ export default class Gif {
 
     /**
      * 
-     * @param {index} Which index you want to set 
-     * @param {frame} the gif frame you want to set
+     * @param {int} index Which index you want to set 
+     * @param {p5.Image} frame the gif frame you want to set
      * @returns {Gif} 
      */
     setFrame(index, frame){
@@ -124,9 +151,9 @@ export default class Gif {
 
     /**
      * 
-     * @param {index} The start index  
-     * @param {frames} Frames you want to insert
-     * @param {Iterator} Optional, can replace your customized iterator for inseration. 
+     * @param {number} index The start index  
+     * @param {Array} frames Frames you want to insert
+     * @param {function} Iterator Optional, can replace your customized iterator for inseration. 
      * @returns {Gif}
      */
     insertFrames(index, frames, iterator=null) {
@@ -151,7 +178,7 @@ export default class Gif {
      * @param {step} step 
      * @return {[p5.Image]}
      */
-    range(start, end, step=1) {
+    range(start=0, end=this._frames.length, step=1) {
         let framesList = []
         if (start < 0 || start >= this._frames.length || end <= 0 || end > this._frames.length) throw new P5GIFError("Wrong end, start value");
         if (end < start && step > 0) throw new P5GIFError('end should bigger than start, if step is positive');

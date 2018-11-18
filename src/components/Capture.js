@@ -13,12 +13,16 @@ export default class Capture {
      * Capture Constructor
      * @param {object} config Config to initialize Capture instance
      */
-    constructor(config) {}
+    constructor(config) {
+        this.settings = Object.assign(this.settings, config);
+    }
     
     /**
      * Start to capture
      */
-    start() {}
+    start(canvasName="") {
+         
+    }
 
     /**
      * Pause to capture
