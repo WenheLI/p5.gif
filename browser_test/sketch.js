@@ -17,6 +17,7 @@ function setup() {
     
     gif2 = p5Gif.loadGif([jpg1, jpg2], function() {
         this.play({y:200});
+        this.resize(100, 100)
     });
 }
 

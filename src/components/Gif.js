@@ -121,17 +121,20 @@ export default class Gif {
      * @param {string}  name the name you want to save as
      */
     download(name='default.gif'){
+        let data = []
         let gif = new GIFEncoder(this.width, this.height);
+        gif.on('data', (buf) => {data.push(buf)})
         gif.writeHeader();
         this.frames.forEach(frame => {
+            frame.loadPixels();
             gif.addFrame(frame.pixels);
+            // delete frame.pixels;
+            // frame.pixels = [];
         })
         gif.finish();
-        return gif;
-        // let link = document.createElement('a');
-        // link.download = 'test.gif';
-        // link.style.display = 'none';
-        // link.href =
+        let binData = data.reduce((prev, curr) => (this.__appendBuffer(prev, curr)), new ArrayBuffer(0))
+        let gifData = new Blob([binData], {"type": "image/gif"})
+        window.open(URL.createObjectURL(gifData))
     }
 
     /**
@@ -313,6 +316,13 @@ export default class Gif {
         return true;
     }
 
+    __appendBuffer = function(buffer1, buffer2) {
+        let tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+        tmp.set(new Uint8Array(buffer1), 0);
+        tmp.set(new Uint8Array(buffer2), buffer1.byteLength);
+        return tmp.buffer;
+      };
+
     /**
      * Controller of the gif
      */
@@ -332,7 +342,8 @@ export default class Gif {
         // play routine loop
         let playRoutine = Routine.Routine(async () => {
             let {x, y} = defaultConf;
-            image(this._frames[index++], x, y);
+            let {width, height} = this._gifConfig;
+            image(this._frames[index++], x, y, width, height);
             if (index >= this._frames.length) {
                 index = 0;
                 if (!this._gifConfig.repeat) playRoutine.stop();
