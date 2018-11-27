@@ -98,12 +98,15 @@ export default class Gif {
         if (typeof sourceGif === 'string' && sourceGif.length) {
             this.__loadGif(sourceGif);
         }
-        //check if sourceGif contains p5Image
+        // check if sourceGif contains p5Image
         else if (this.__isList(sourceGif) && this.__checkFrames(sourceGif)) {
             this.__loadGifFromList(sourceGif);
         }
         else throw new P5GIFError('Wrong type of sourceGif.');
-
+        // register p5Image functions
+        this.__register('filter');
+        this.__register('blend');
+        this.__register('mask');
     }
     
     /**
@@ -379,5 +382,13 @@ export default class Gif {
     get loop() { return this.__controller && this.__controller.loop; }
     get next() { return this.__controller && this.__controller.next; }
     get pause() { return this.__controller && this.__controller.pause; }
-    
+
+    __register(func, name=null) {
+        this[name || func] = function (...args) {
+            if (!this.frames || typeof this.frames[0][func] !== 'function') throw new P5GIFError('cannot execute ' + func);
+            this.frames.forEach(frame => {
+                frame[func].apply(frame, args)
+            });
+        }
+    }
 }

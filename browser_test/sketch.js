@@ -7,7 +7,7 @@ function setup() {
     createCanvas(500, 500);
 
     gif1 = p5Gif.loadGif("test.gif", function() {
-        this.play();
+        this.loop();
     }, {repeat:false});
 
     jpg1 = loadImage("test.jpg");
