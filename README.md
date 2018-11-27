@@ -85,7 +85,7 @@ gif1.range(5, 10).grayscale(0.7);       // do grayscale on frame [5, 10)
 gif1.display(0, 0);
 
 /* Addons API */
-let cap = p5GIF.capture({
+let cap = p5Gif.capture({
     top: 0, 
     left: 0, 
     width: CANVAS_WIDTH, 
