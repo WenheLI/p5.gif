@@ -46,7 +46,7 @@ export default class p5Gif {
      */
     static capture(config={}) {
         p5Gif.checkP5();
-        return null;
+        return new Capture(config);
     }
 
 }

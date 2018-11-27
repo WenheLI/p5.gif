@@ -102,6 +102,9 @@ export default class Gif {
         else if (this.__isList(sourceGif) && this.__checkFrames(sourceGif)) {
             this.__loadGifFromList(sourceGif);
         }
+        else if (this.__isList(sourceGif)) {
+            this._frames = this.__pixel2Iamge(sourceGif);
+        }
         else throw new P5GIFError('Wrong type of sourceGif.');
         // register p5Image functions
         this.__register('filter');
@@ -123,7 +126,7 @@ export default class Gif {
      * 
      * @param {string}  name the name you want to save as
      */
-    download(name='default.gif'){
+    async download(name='default.gif'){
         let data = []
         let gif = new GIFEncoder(this.width, this.height);
         gif.on('data', (buf) => {data.push(buf)})
@@ -307,10 +310,9 @@ export default class Gif {
             P5GIFError.throw('Cannot construct P5GIF from non-array object.');
             return false;
         }
-        arr.forEach(item => {
-            if (!(item instanceof p5.Image)) P5GIFError.throw('Elements of constructor array should be p5.Image objects.');
-            return false;
-        });
+        for (let item of arr) {
+            if (!(item instanceof p5.Image)) return false; //P5GIFError.throw('Elements of constructor array should be p5.Image objects.');
+        }
         return true;
     }
 

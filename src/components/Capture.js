@@ -73,7 +73,7 @@ export default class Capture {
      * Auto stop capturing when meet some conditions
      * @param {object} config Stop Capturing Conditions
      */
-    stopAfter(config) {
+    startUntil(config) {
         if (!this.settings.context) throw P5GIFError("canvas context does not exist");
 
         let stopAfterFrame = -1;
@@ -91,7 +91,7 @@ export default class Capture {
             if (stopAfterFrame > 0 && this.tick > stopAfterFrame) this.terminate();
             else if (stopAfterMilliSecond > 0 && this.lasts > stopAfterMilliSecond) this.terminate();
             let {left, top, width, height} = that.settings;
-            that.frames.push(that.settings.canvas.getImageData(left, top, width, height).data);
+            if (stopAfterFrame <= 0 || stopAfterFrame > that.frames.length) that.frames.push(that.settings.context.getImageData(left, top, width, height).data);
         }, { 
             tickIntv: this.delay, 
             infinite: true
@@ -102,19 +102,13 @@ export default class Capture {
      * Save current captured data and return Gif instance
      * @returns {p5Gif.Gif} Gif instance
      */
-    save(callback) {
+    async save() {
         if (this.frames && this.frames.length) {
-            let imageArray = Gif.prototype.__pixel2Iamge(this.frames.map(f => ({
+            return new Gif(this.frames.map(f => ({
                 delay: this.delay,
                 dims: {width: this.settings.width, height: this.settings.height},
                 patch: f
             })));
-            return new Promise((resolve, reject) => {
-                new Gif(imageArray, function() {
-                    resolve();
-                    callback && callback();
-                });
-            });
         } else {
             return null;
         }

@@ -21,8 +21,6 @@ function setup() {
     });
 }
 
-
-
 function draw() {
     // put drawing code here
     // if (gif.isLoading) return;
@@ -38,4 +36,3 @@ function draw() {
     //     gif.pause();
     // }
 }
-
