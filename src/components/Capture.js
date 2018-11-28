@@ -45,7 +45,7 @@ export default class Capture {
      * Start to capture
      */
     start() {
-        this.stopAfter({});
+        this.startUntil({});
     }
 
     /**
@@ -73,7 +73,7 @@ export default class Capture {
      * Auto stop capturing when meet some conditions
      * @param {object} config Stop Capturing Conditions
      */
-    startUntil(config) {
+    startUntil(config, fn) {
         if (!this.settings.context) throw P5GIFError("canvas context does not exist");
 
         let stopAfterFrame = -1;
@@ -88,8 +88,14 @@ export default class Capture {
         
         let that = this;
         this.recordRoutine = Routine.Routine(async function() {
-            if (stopAfterFrame > 0 && this.tick > stopAfterFrame) this.terminate();
-            else if (stopAfterMilliSecond > 0 && this.lasts > stopAfterMilliSecond) this.terminate();
+            if (stopAfterFrame > 0 && this.tick > stopAfterFrame) {
+                this.terminate();
+                fn && fn.call(that);
+            }
+            else if (stopAfterMilliSecond > 0 && this.lasts > stopAfterMilliSecond) {
+                this.terminate();
+                fn && fn.call(that);
+            }
             let {left, top, width, height} = that.settings;
             if (stopAfterFrame <= 0 || stopAfterFrame > that.frames.length) that.frames.push(that.settings.context.getImageData(left, top, width, height).data);
         }, { 
@@ -102,13 +108,17 @@ export default class Capture {
      * Save current captured data and return Gif instance
      * @returns {p5Gif.Gif} Gif instance
      */
-    async save() {
+    async finish(fn) {
         if (this.frames && this.frames.length) {
-            return new Gif(this.frames.map(f => ({
+            let newGif = new Gif(this.frames.map(f => ({
                 delay: this.delay,
                 dims: {width: this.settings.width, height: this.settings.height},
                 patch: f
             })));
+            Routine.Task(async function () {
+                fn && fn.call(this, newGif);
+            }, this)();
+            return newGif;
         } else {
             return null;
         }
