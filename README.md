@@ -1,7 +1,7 @@
 # p5.gif
 
-[![NHibiki](https://img.shields.io/badge/Download-Stable-39c000.svg?style=flat-square)](https://p5gif-build.s3.us-west-2.amazonaws.com/stable/p5gif.min.js)
-[![NHibiki](https://img.shields.io/badge/Download-Nightly-edb900.svg?style=flat-square)](https://p5gif-build.s3.us-west-2.amazonaws.com/nightly/latest.min.js)
+[![NHibiki](https://img.shields.io/badge/Download-Stable-39c000.svg?style=flat-square)](https://p5gif.s3.yuu.uno/stable/p5gif.min.js)
+[![NHibiki](https://img.shields.io/badge/Download-Nightly-edb900.svg?style=flat-square)](https://p5gif.s3.yuu.uno/nightly/latest.min.js)
 [![CircleCI - Prod](https://circleci.com/gh/WenheLI/p5.gif/tree/master.svg?style=svg)](https://circleci.com/gh/WenheLI/p5.gif/tree/master)
 
 A Powerful gif module for p5.js
@@ -138,7 +138,7 @@ cap.save();                             // -> p5GIF
 | Barriers \|\| Concerns | null |
 | Github | [NHibiki](https://github.com/NHibiki) |
 | Blog | [Blog](https://yuuno.cc) |
-| Portfolio | [Portfolio](https://portfolio.yuuno.cc) |
+| Portfolio | [Portfolio](https://i.yuuno.cc) |
 
 #### Wenhe Li
 | KEY | VALUE |
