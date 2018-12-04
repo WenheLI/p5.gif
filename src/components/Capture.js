@@ -22,6 +22,10 @@ export default class Capture {
     config = {};
     frames = [];
     recordRoutine = null;
+    
+    get isRecording() {
+        return this.recordRoutine ? this.recordRoutine.state === 1 : false;
+    }
 
     get delay() {
         return Math.max(parseInt(1000 / this.settings.framerate, 10), 50);
@@ -45,7 +49,8 @@ export default class Capture {
      * Start to capture
      */
     start() {
-        this.startUntil({});
+        this.recordUntil({});
+        return this;
     }
 
     /**
@@ -53,6 +58,7 @@ export default class Capture {
      */
     pause() {
         this.recordRoutine.pause();
+        return this;
     }
 
     /**
@@ -60,6 +66,7 @@ export default class Capture {
      */
     resume() {
         this.recordRoutine.start();
+        return this;
     }
 
     /**
@@ -67,13 +74,27 @@ export default class Capture {
      */
     stop() {
         this.recordRoutine.terminate();
+        return this;
+    }
+
+    /**
+     * Add frame to capture
+     */
+    addFrame() {
+        if (!this.isRecording) {
+            let {left, top, width, height} = that.settings;
+            this.frames.push(this.settings.context.getImageData(left, top, width, height).data);
+        } else {
+            throw P5GIFError("cannot add frame when recording has started.");
+        }
+        return this;
     }
 
     /**
      * Auto stop capturing when meet some conditions
      * @param {object} config Stop Capturing Conditions
      */
-    startUntil(config, fn) {
+    recordUntil(config, fn) {
         if (!this.settings.context) throw P5GIFError("canvas context does not exist");
 
         let stopAfterFrame = -1;
@@ -102,13 +123,14 @@ export default class Capture {
             tickIntv: this.delay, 
             infinite: true
         }).start();
+        return this;
     }
 
     /**
      * Save current captured data and return Gif instance
      * @returns {p5Gif.Gif} Gif instance
      */
-    async finish(fn) {
+    async export(fn) {
         if (this.frames && this.frames.length) {
             let newGif = new Gif(this.frames.map(f => ({
                 delay: this.delay,
@@ -125,6 +147,11 @@ export default class Capture {
             }, this)();
             return null;
         }
+    }
+
+    async download() {
+        let newGif = await this.export();
+        newGif.download();
     }
 
 }
