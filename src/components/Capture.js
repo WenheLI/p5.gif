@@ -82,7 +82,7 @@ export default class Capture {
      */
     addFrame() {
         if (!this.isRecording) {
-            let {left, top, width, height} = that.settings;
+            let {left, top, width, height} = this.settings;
             this.frames.push(this.settings.context.getImageData(left, top, width, height).data);
         } else {
             throw P5GIFError("cannot add frame when recording has started.");
