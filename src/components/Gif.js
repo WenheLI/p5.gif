@@ -134,13 +134,14 @@ export default class Gif {
         this.frames.forEach(frame => {
             frame.loadPixels();
             gif.addFrame(frame.pixels);
-            // delete frame.pixels;
-            // frame.pixels = [];
         })
         gif.finish();
         let binData = data.reduce((prev, curr) => (this.__appendBuffer(prev, curr)), new ArrayBuffer(0))
         let gifData = new Blob([binData], {"type": "image/gif"})
-        window.open(URL.createObjectURL(gifData))
+        let downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(gifData);
+        downloadLink.download = name;
+        downloadLink.click();
     }
 
     /**
