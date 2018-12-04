@@ -120,6 +120,9 @@ export default class Capture {
             }, this)();
             return newGif;
         } else {
+            Routine.Task(async function () {
+                fn && fn.call(this, null);
+            }, this)();
             return null;
         }
     }
