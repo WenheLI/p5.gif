@@ -350,12 +350,12 @@ export default class Gif {
             let {x, y} = defaultConf;
             let {width, height} = this._gifConfig;
             let clear = this._gifConfig.clear || true;
-            if (clear) {
-                push();
-                noStroke();
-                fill(255, 255, 255);
-                rect(x, y, width, height);
-                pop();
+            if (clear && window.push && window.noStroke && window.fill && window.rect && window.pop) {
+                window.push();
+                window.noStroke();
+                window.fill(255, 255, 255);
+                window.rect(x, y, width, height);
+                window.pop();
             }
             image(this._frames[index++], x, y, width, height);
             if (index >= this._frames.length) {
