@@ -342,13 +342,21 @@ export default class Gif {
         // initialize controller
         let index = 0;
         let defaultConf = {
-            x:0, y:0, width: this._gifConfig.width || 0, height: this._gifConfig.height || 0
+            x:0, y:0, width: this._gifConfig.width || 0, height: this._gifConfig.height || 0, clear: true
         };
 
         // play routine loop
         let playRoutine = Routine.Routine(async () => {
             let {x, y} = defaultConf;
             let {width, height} = this._gifConfig;
+            let clear = this._gifConfig.clear || true;
+            if (clear) {
+                push();
+                noStroke();
+                fill(255, 255, 255);
+                rect(x, y, width, height);
+                pop();
+            }
             image(this._frames[index++], x, y, width, height);
             if (index >= this._frames.length) {
                 index = 0;
