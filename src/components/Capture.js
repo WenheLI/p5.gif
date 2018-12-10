@@ -149,9 +149,9 @@ export default class Capture {
         }
     }
 
-    async download(fileName) {
+    async download(fileName="default.gif") {
         let newGif = await this.export();
-        if (tyeof fileName === "string"){
+        if (typeof fileName === "string"){
             newGif.download(fileName);
         }
     }
