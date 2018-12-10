@@ -23,25 +23,27 @@ P5.gif is a p5 library aiming to provide a native gif experience when you are us
 
 - Tech Specs
 
-- **jsRoutine**
-jsRoutine is a library built for p5gif to control the lifecycle of gif play or capture. Following the concept in `Golang`, jsRoutine allows users to control the process easily and safely.
-- **gif encoder/decoder**
-To read/save gif file, we need to encode/decode the input file. To achieve this functionality, we include two libraries to do so right now. By following the gif file designed format, the two libraries will write and read bytecode directly to help us convert gif to p5.gif Object.
-- **wrapper**_(factory)_
-Wrapper is a useful software engineer concept to generate functions with similar attributions (aka _prototypes_). We use wrappers to quickly migrate filter functions from p5Image to p5Gif.
-- **build toolchain**
-In this section, we followed the **p5**'s build tool (eg. _grunt_, _eslint_, and _browserfy_). In addition, we also include auto publishment with the CircleCI. 
+  - **jsRoutine**
+  jsRoutine is a library built for p5gif to control the lifecycle of gif play or capture. Following the concept in `Golang`, jsRoutine allows users to control the process easily and safely.
+  - **gif encoder/decoder**
+  To read/save gif file, we need to encode/decode the input file. To achieve this functionality, we include two libraries to do so right now. By following the gif file designed format, the two libraries will write and read bytecode directly to help us convert gif to p5.gif Object.
+  - **wrapper**_(factory)_
+  Wrapper is a useful software engineer concept to generate functions with similar attributions (aka _prototypes_). We use wrappers to quickly migrate filter functions from p5Image to p5Gif.
+  - **build toolchain**
+  In this section, we followed the **p5**'s build tool (eg. _grunt_, _eslint_, and _browserfy_). In addition, we also include auto publishment with the CircleCI. 
 
 - Challenges
-- Setuping build tools
+  - Setuping build tools
 - Gif Encoder/Decoder
-- Multitask processing/rendering
+  - Multitask processing/rendering
 
 - Success & Failure
 - **Success**
-We deliver a fully functional library with lovely documentation.
+
+   We deliver a fully functional library with lovely documentation.
 - **Failure**
-A relatively low efficiency of gif converting. 
+
+  A relatively low efficiency of gif converting. 
 
 ## Accessibility
 
@@ -49,7 +51,7 @@ We implement ``p5gif.assert`` method that can automatically append ``aria-label`
 
 ## Longer-Term Goals
 
-- [ ] Implement gif converting efficiency. We may plan to use native ``WebGL`` code and ``WebWorker`` with *virtual-canvas* or *canvas compatible API*.
+- [ ] Enhance gif converting efficiency. We may plan to use native ``WebGL`` code and ``WebWorker`` with *virtual-canvas* or *canvas compatible API*.
 - [ ] Testcase build up. Right now since our library is all about gif drawing and playing, we are still trying to figure out a way to run automatic test cases. 
 - [ ] Improvement of encoding/decoding process using ``Web Assembly``.
 - [ ] Splitting a stand-alone library out. Users can choose to use p5.gif with p5 or not (Or a function to download and import p5 core library automatically).
