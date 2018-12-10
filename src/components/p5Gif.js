@@ -48,5 +48,22 @@ export default class p5Gif {
         p5Gif.checkP5();
         return new Capture(config);
     }
+    
+    /**
+     * Static method to assert accessibility labels
+     * @param   {string}  words to assert
+     * @param   {string}  optional, dom id to assert
+     * @returns {boolean} operation status, success or failure
+     */
+    static assert(words, ele="defaultCanvas0") {
+        let d = null;
+        if (!d && typeof document !== "undefined") d = document.getElementById(ele);
+        if (!d && typeof document !== "undefined") d = document.getElementsByTagName("CANVAS")[0] || null;
+        if (!d) return false;
+        
+        d.setAttribute("aria-live", true);
+        d.setAttribute("aria-label", "defaultCanvas0");
+        return true;
+    }
 
 }
