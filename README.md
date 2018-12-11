@@ -5,6 +5,8 @@
 [![Docs](https://img.shields.io/badge/Read-Docs-4da1ff.svg?style=flat-square)](https://github.com/WenheLI/p5.gif/wiki)
 [![CircleCI - Prod](https://circleci.com/gh/WenheLI/p5.gif/tree/master.svg?style=svg)](https://circleci.com/gh/WenheLI/p5.gif/tree/master)
 
+[Loading Demo](https://editor.p5js.org/eric1998/sketches/ryClTBjyE) | [Capturing Demo](https://editor.p5js.org/eric1998/sketches/HkWo7LskN)
+
 ## Summary
 p5gif is a library to process GIF on top of p5.js. It can help artists easily handling GIF related operations. eg. making GIFs, splitting frames, etc.
 
