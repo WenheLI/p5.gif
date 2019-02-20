@@ -17,7 +17,7 @@ export default class Capture {
         left: 0,
         width: -1, 
         height: -1,
-        framerate: 10
+        framerate: 5
     };
     config = {};
     frames = [];
@@ -28,7 +28,7 @@ export default class Capture {
     }
 
     get delay() {
-        return Math.max(parseInt(1000 / this.settings.framerate, 10), 50);
+        return Math.max(parseInt(1000 / this.settings.framerate, 10), 30); //limit the framerate below 30
     }
 
     /**
@@ -41,7 +41,7 @@ export default class Capture {
         if (!this.settings.canvas) throw P5GIFError("cannot find such canvas");
         if (this.settings.width < 0 || this.settings.width > this.settings.canvas.width) this.settings.width = this.settings.canvas.width;
         if (this.settings.height < 0 || this.settings.height > this.settings.canvas.height) this.settings.height = this.settings.canvas.height;
-        if (this.settings.framerate > 15) this.settings.framerate = 20;
+        if (this.settings.framerate > 30) this.settings.framerate = 30;
         this.settings.context = this.settings.canvas.getContext("2d");
     }
     
@@ -120,7 +120,7 @@ export default class Capture {
             let {left, top, width, height} = that.settings;
             if (stopAfterFrame <= 0 || stopAfterFrame > that.frames.length) that.frames.push(that.settings.context.getImageData(left, top, width, height).data);
         }, { 
-            tickIntv: this.delay, 
+            tickIntv: that.delay, 
             infinite: true
         }).start();
         return this;
