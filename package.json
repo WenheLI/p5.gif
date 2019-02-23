@@ -1,6 +1,6 @@
 {
     "name": "p5.gif",
-    "version": "1.0.2-rc1",
+    "version": "1.0.3",
     "scripts": {
         "build": "npx grunt",
         "lint": "npx eslint ./src/*.js ./src/components/*.js"

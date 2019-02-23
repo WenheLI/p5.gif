@@ -141,7 +141,12 @@ export default class Gif {
         let downloadLink = document.createElement('a');
         downloadLink.href = URL.createObjectURL(gifData);
         downloadLink.download = name;
+        document.body.appendChild(downloadLink);
         downloadLink.click();
+        let tempTimer = setTimeout(() => {
+            document.body.removeChild(downloadLink)
+            clearTimeout(tempTimer);
+        }, 100);
     }
 
     /**
