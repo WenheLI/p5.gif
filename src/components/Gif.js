@@ -126,16 +126,23 @@ export default class Gif {
      * 
      * @param {string}  name the name you want to save as
      */
-    async download(name='default.gif'){
+    async download(name='default.gif', setting={}){
         let data = []
         let gif = new GIFEncoder(this.width, this.height);
         gif.on('data', (buf) => {data.push(buf)})
         gif.writeHeader();
-        this.frames.forEach(frame => {
+        let repeat = setting.repeat || false;
+        gif.setRepeat(repeat ? 0 : -1);
+        console.log(`%c You got ${this.frames.length} in total.`, 'background: #222; color:  #bada55');
+        this.frames.forEach((frame, index) => {
+            if (((100*index/this.frames.length)%10) === 0) {
+                console.log(`%c ${index} frames have been processed, ${100*index/this.frames.length}%`, 'background: #222; color:  #bada55');
+            }
             frame.loadPixels();
             gif.addFrame(frame.pixels);
         })
         gif.finish();
+        console.log(`%c Frames are all dumped, download will start soon.`, 'background: #222; color: #bada55');
         let binData = data.reduce((prev, curr) => (this.__appendBuffer(prev, curr)), new ArrayBuffer(0))
         let gifData = new Blob([binData], {"type": "image/gif"})
         let downloadLink = document.createElement('a');

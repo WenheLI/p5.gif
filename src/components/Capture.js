@@ -22,6 +22,7 @@ export default class Capture {
     config = {};
     frames = [];
     recordRoutine = null;
+    oriDensity = 1;
     
     get isRecording() {
         return this.recordRoutine ? this.recordRoutine.state === 1 : false;
@@ -49,6 +50,8 @@ export default class Capture {
      * Start to capture
      */
     start() {
+        this.Density = p5.pixelDensity;
+        p5.pixelDensity(1);
         this.recordUntil({});
         return this;
     }
@@ -73,6 +76,8 @@ export default class Capture {
      * Stop capturing
      */
     stop() {
+        p5.pixelDensity(this.oriDensity);
+        this.oriDensity = null;
         this.recordRoutine.terminate();
         return this;
     }
@@ -150,9 +155,10 @@ export default class Capture {
     }
 
     async download(fileName="default.gif") {
+        console.log(`%c Gif download strats, your browser may lock up for sometime!`, 'background: #222; color:  #bada55');
         let newGif = await this.export();
         if (typeof fileName === "string"){
-            newGif.download(fileName);
+            newGif.download(fileName, this.settings);
         }
     }
 

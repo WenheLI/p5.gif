@@ -16,7 +16,7 @@ p5gif is a library to process GIF on top of p5.js. It can help artists easily ha
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js"></script>
-<script src="https://unpkg.com/p5.gif@1.0.3/dist/p5gif.min.js"></script>
+<script src="https://unpkg.com/p5.gif@1.0.4/dist/p5gif.min.js"></script>
 ```
 
 ### Build From Source
