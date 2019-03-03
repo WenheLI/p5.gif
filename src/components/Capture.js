@@ -17,7 +17,9 @@ export default class Capture {
         left: 0,
         width: -1, 
         height: -1,
-        framerate: 5
+        framerate: 10,
+        repeat: false,
+        webgl: false
     };
     config = {};
     frames = [];
@@ -38,12 +40,12 @@ export default class Capture {
      */
     constructor(config) {
         this.settings = Object.assign(this.settings, config);
-        this.settings.canvas = document.getElementById(`#${this.settings.canvas}`) || window.canvas;
+        this.settings.canvas = document.getElementById(`${this.settings.canvas}`) || window.canvas;
         if (!this.settings.canvas) throw P5GIFError("cannot find such canvas");
         if (this.settings.width < 0 || this.settings.width > this.settings.canvas.width) this.settings.width = this.settings.canvas.width;
         if (this.settings.height < 0 || this.settings.height > this.settings.canvas.height) this.settings.height = this.settings.canvas.height;
         if (this.settings.framerate > 30) this.settings.framerate = 30;
-        this.settings.context = this.settings.canvas.getContext("2d");
+        this.settings.context = this.settings.webgl ?  this.settings.canvas.getContext("webgl") : this.settings.canvas.getContext("2d");
     }
     
     /**
@@ -87,8 +89,7 @@ export default class Capture {
      */
     addFrame() {
         if (!this.isRecording) {
-            let {left, top, width, height} = this.settings;
-            this.frames.push(this.settings.context.getImageData(left, top, width, height).data);
+            this._addFrame();
         } else {
             throw P5GIFError("cannot add frame when recording has started.");
         }
@@ -122,13 +123,27 @@ export default class Capture {
                 this.terminate();
                 fn && fn.call(that);
             }
-            let {left, top, width, height} = that.settings;
-            if (stopAfterFrame <= 0 || stopAfterFrame > that.frames.length) that.frames.push(that.settings.context.getImageData(left, top, width, height).data);
+            if (stopAfterFrame <= 0 || stopAfterFrame > that.frames.length) {
+                let pixels = null;
+                that._addFrame();
+                that.frames.push(pixels);
+            }
         }, { 
             tickIntv: that.delay, 
             infinite: true
         }).start();
         return this;
+    }
+
+    _addFrame() {
+        let {left, top, width, height} = this.settings;
+        let pixels = null;
+        if (this.settings.webgl) {
+            let gl = this.settings.context;
+            pixels = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
+            gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+        } else pixels = this.settings.context.getImageData(left, top, width, height).data;
+        this.frames.push(pixels);
     }
 
     /**

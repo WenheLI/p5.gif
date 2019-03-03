@@ -1,38 +1,32 @@
-var jpg1, jpg2;
-var gif1, gif2;
-var startFrame = 0;
+let nFramesInLoop = 120;
+let recorder;
 
 function setup() {
-    // put setup code here
-    createCanvas(500, 500);
-
-    gif1 = p5Gif.loadGif("test.gif", function() {
-        this.loop();
-    }, {repeat:false});
-
-    jpg1 = loadImage("test.jpg");
-    jpg2 = loadImage("test.jpg", () => {
-        jpg2.filter('gray');
-    });
-    
-    gif2 = p5Gif.loadGif([jpg1, jpg2], function() {
-        this.play({y:200});
-        this.resize(100, 100)
-    });
+  createCanvas(200, 200);
+  recorder = p5Gif.capture({framerate: 60});
 }
 
+
 function draw() {
-    // put drawing code here
-    // if (gif.isLoading) return;
-    // if (!startFrame) {
-    //     startFrame = frameCount;
-    //     gif.play();
-    // }
-    // if (frameCount < 200 + startFrame) {
-    //     gif.delay = [50, 50];
-    // } else if (frameCount < 400 + startFrame) {
-    //     gif.delay = [null, 300];
-    // } else {
-    //     gif.pause();
-    // }
+  let percentCompleteFraction = float(frameCount % nFramesInLoop) / float(nFramesInLoop);
+  renderMyDesign(percentCompleteFraction);
+  recorder.addFrame();
+  if (frameCount == nFramesInLoop) {
+    recorder.download('codingtrain.gif');
+  }
+}
+
+function renderMyDesign(percent) {
+  background(180);
+  stroke(0, 0, 0);
+  strokeWeight(2);
+  var cx = 100;
+  var cy = 100;
+  var radius = 80;
+  var rotatingArmAngle = percent * TWO_PI;
+  var px = cx + radius * cos(rotatingArmAngle);
+  var py = cy + radius * sin(rotatingArmAngle);
+  fill(255);
+  line(cx, cy, px, py);
+  ellipse(px, py, 20, 20);
 }
