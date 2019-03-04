@@ -133,7 +133,9 @@ export default class Gif {
         gif.writeHeader();
         let repeat = setting.repeat || false;
         gif.setRepeat(repeat ? 0 : -1);
+        gif.setFrameRate(setting.framerate);
         console.log(`%c You got ${this.frames.length} in total.`, 'background: #222; color:  #bada55');
+        console.log(`%c The framerate you set is ${setting.framerate}.`, 'background: #222; color:  #bada55');
         this.frames.forEach((frame, index) => {
             if (((100*index/this.frames.length)%10) === 0) {
                 console.log(`%c ${index} frames have been processed, ${100*index/this.frames.length}%`, 'background: #222; color:  #bada55');
