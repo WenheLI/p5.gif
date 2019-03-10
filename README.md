@@ -8,7 +8,7 @@
 [Loading Demo](https://editor.p5js.org/eric1998/sketches/ryClTBjyE) | [Capturing Demo](https://editor.p5js.org/eric1998/sketches/HkWo7LskN)
 
 ## Summary
-p5gif is a library to process GIF on top of p5.js. It can help artists easily handling GIF related operations. eg. making GIFs, splitting frames, etc.
+p5gif is a library to allow you play/use animated gif in p5.js and process GIF on top of p5.js. It can help artists easily handling GIF related operations. eg. making GIFs, splitting frames, etc.
 
 ## How to use
 
