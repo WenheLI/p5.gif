@@ -4,6 +4,7 @@
 import P5GIFError from './Error.js';
 import Gif from './Gif.js';
 import { Routine } from '@nhibiki/js-routine';
+import p5Gif from './p5Gif.js';
 
 export default class Capture {
 
@@ -19,7 +20,8 @@ export default class Capture {
         height: -1,
         framerate: 10,
         repeat: false,
-        webgl: false
+        webgl: false,
+        p5: null
     };
     config = {};
     frames = [];
@@ -40,6 +42,11 @@ export default class Capture {
      */
     constructor(config) {
         this.settings = Object.assign(this.settings, config);
+        if (!p5Gif.checkP5() && !this.settings.p5) {
+            throw new Error('p5 is not imported');
+        } else if(p5Gif.checkP5()) {
+            this.settings.p5 = p5;
+        }
         this.settings.canvas = document.getElementById(`${this.settings.canvas}`) || window.canvas;
         if (!this.settings.canvas) throw P5GIFError("cannot find such canvas");
         if (this.settings.width < 0 || this.settings.width > this.settings.canvas.width) this.settings.width = this.settings.canvas.width;
@@ -52,8 +59,8 @@ export default class Capture {
      * Start to capture
      */
     start() {
-        this.Density = p5.pixelDensity;
-        p5.pixelDensity(1);
+        this.Density = this.settings.p5.pixelDensity;
+        this.settings.p5.pixelDensity(1);
         this.recordUntil({});
         return this;
     }
@@ -78,7 +85,7 @@ export default class Capture {
      * Stop capturing
      */
     stop() {
-        p5.pixelDensity(this.oriDensity);
+        this.settings.p5.pixelDensity(this.oriDensity);
         this.oriDensity = null;
         this.recordRoutine.terminate();
         return this;

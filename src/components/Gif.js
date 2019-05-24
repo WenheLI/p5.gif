@@ -76,7 +76,8 @@ export default class Gif {
 
     _gifConfig = {
         repeat: true,
-        delay: [] //describe delay for every frame
+        delay: [], //describe delay for every frame
+        p5: null
     }
 
     /** 
@@ -90,6 +91,12 @@ export default class Gif {
         // check type of config
         if (gifConfig && typeof gifConfig !== 'object') throw new P5GIFError("Config can only be an object.");
         this._gifConfig = Object.assign(this._gifConfig, gifConfig);
+
+        if (!p5Gif.checkP5() && !this._gifConfig.p5) {
+            throw new Error('p5 is not imported');
+        } else if(p5Gif.checkP5()) {
+            this._gifConfig.p5 = p5;
+        }
 
         // check type of callback
         let callback = (gifConfig || {}).onPrepare || null;
@@ -166,7 +173,7 @@ export default class Gif {
      */
     setFrame(index, frame){
         if (index < 0 || index >= this.frames.length) throw new P5GIFError("Wrong value of index");
-        else if (! (frame instanceof p5.Image)) throw new P5GIFError("Wrong frame type, it should be p5.Image");
+        else if (! (frame instanceof this._gifConfig.p5.Image)) throw new P5GIFError("Wrong frame type, it should be p5.Image");
         
         this._frames[index] = frame;
         this.setDelayOf(index, 100);
@@ -220,7 +227,7 @@ export default class Gif {
      */
     draw(x=0, y=0) {
         if (!this._frames) throw new P5GIFError("should put frames first");
-        p5.image(this._frames[0], x, y);
+        this._gifConfig.p5.image(this._frames[0], x, y);
     }
     /**
      * @param {URL} url describe the gif url
@@ -326,7 +333,7 @@ export default class Gif {
             return false;
         }
         for (let item of arr) {
-            if (!(item instanceof p5.Image)) return false; //P5GIFError.throw('Elements of constructor array should be p5.Image objects.');
+            if (!(item instanceof this._gifConfig.p5.Image)) return false; //P5GIFError.throw('Elements of constructor array should be p5.Image objects.');
         }
         return true;
     }

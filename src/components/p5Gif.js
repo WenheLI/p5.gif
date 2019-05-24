@@ -17,7 +17,7 @@ export default class p5Gif {
      */
     static checkP5() {
         if (typeof window !== 'undefined' && window.p5 && window.p5.Image && typeof window.p5.Image === 'function') return true;
-        throw new Error('p5 is not imported.');
+        return false;
     }
 
     /**
